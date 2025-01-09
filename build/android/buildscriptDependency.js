@@ -9,6 +9,11 @@ function applyImplementation(appBuildGradle) {
     if (appBuildGradle.includes(codePushImplementation)) {
         return appBuildGradle;
     }
+    const reactNative75Marker = `autolinkLibrariesWithApp()`;
+    if (appBuildGradle.includes(reactNative75Marker)) {
+        // kind of janky, but we need to add the codepush.gradle apply to the top level of the file
+        return appBuildGradle + `\n${codePushImplementation}`;
+    }
     // The default on Expo 50
     const reactNative73Include = `apply from: new File(["node", "--print", "require.resolve('@react-native-community/cli-platform-android/package.json', { paths: [require.resolve('react-native/package.json')] })"].execute(null, rootDir).text.trim(), "../native_modules.gradle");`;
     if (appBuildGradle.includes(reactNative73Include)) {
